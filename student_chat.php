@@ -25,6 +25,32 @@ $current_page = 'student_chat.php';
     <title>Chat with Teachers - GGF Christian School</title>
     <link rel="stylesheet" href="css/student_v2.css">
     <style>
+        /* Notification badge styles */
+        .teacher-unread-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-weight: 700;
+            font-size: 12px;
+            margin-left: 8px;
+            animation: badge-pop 0.3s ease-out;
+        }
+
+        .teacher-unread-badge.hidden {
+            display: none;
+        }
+
+        @keyframes badge-pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         .chat-container {
             display: flex;
             gap: 20px;
@@ -318,6 +344,51 @@ $current_page = 'student_chat.php';
         let cachedMessagesCount = 0;
         let currentRequestId = null; // Track the current request
 
+        // Notification management functions
+        function getUnreadConversations() {
+            const unread = JSON.parse(localStorage.getItem('unreadConversations_student') || '{}');
+            return unread;
+        }
+
+        function setUnreadCount(teacherId, count) {
+            const unread = getUnreadConversations();
+            if (count > 0) {
+                unread[teacherId] = count;
+            } else {
+                delete unread[teacherId];
+            }
+            localStorage.setItem('unreadConversations_student', JSON.stringify(unread));
+            updateNotificationBadge();
+        }
+
+        function markConversationAsRead(teacherId) {
+            setUnreadCount(teacherId, 0);
+        }
+
+        function updateNotificationBadge() {
+            const unread = getUnreadConversations();
+            
+            // Update each teacher's badge
+            document.querySelectorAll('.teacher-unread-badge').forEach(badge => {
+                const teacherId = parseInt(badge.getAttribute('data-teacher-id'));
+                const count = unread[teacherId] || 0;
+                
+                if (count > 0) {
+                    badge.textContent = count;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            });
+        }
+
+        function addUnreadMessage(teacherId) {
+            const unread = getUnreadConversations();
+            unread[teacherId] = (unread[teacherId] || 0) + 1;
+            localStorage.setItem('unreadConversations_student', JSON.stringify(unread));
+            updateNotificationBadge();
+        }
+
         // Load teachers
         async function loadTeachers() {
             try {
@@ -339,7 +410,10 @@ $current_page = 'student_chat.php';
             
             panel.innerHTML = teachers.map(t => `
                 <div class="teacher-item" data-teacher-id="${t.id}" data-teacher-name="${t.name}">
-                    <div class="teacher-name">${t.name}</div>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div class="teacher-name">${t.name}</div>
+                        <div class="teacher-unread-badge hidden" data-teacher-id="${t.id}">0</div>
+                    </div>
                     <div class="teacher-subject">${t.subject || 'Teacher'}</div>
                 </div>
             `).join('');
@@ -376,6 +450,9 @@ $current_page = 'student_chat.php';
             document.getElementById('chatTeacherName').textContent = teacherName;
             document.getElementById('chatArea').style.display = 'flex';
             document.getElementById('noChat').style.display = 'none';
+            
+            // Mark this conversation as read
+            markConversationAsRead(teacherId);
             
             // Clear messages immediately
             document.getElementById('messagesContainer').innerHTML = '';
@@ -415,6 +492,10 @@ $current_page = 'student_chat.php';
                 if (newMessages.length !== cachedMessagesCount) {
                     cachedMessagesCount = newMessages.length;
                     displayMessages(newMessages);
+                    
+                    // Mark all messages as read since conversation is open
+                    markConversationAsRead(selectedTeacherId);
+                    updateNotificationBadge();
                     
                     const container = document.getElementById('messagesContainer');
                     setTimeout(() => { container.scrollTop = container.scrollHeight; }, 100);
@@ -557,10 +638,45 @@ $current_page = 'student_chat.php';
         }
 
         loadTeachers();
+        
+        // Background polling to check for new messages
+        async function pollForNewMessages() {
+            for (let teacher of teachers) {
+                try {
+                    const response = await fetch(`api/get_chat_messages.php?user_type=student&teacher_id=${teacher.id}`);
+                    const data = await response.json();
+                    
+                    if (!data.error && data.messages) {
+                        // Only count messages from the teacher (not from student)
+                        const teacherMessages = data.messages.filter(msg => msg.sender_type === 'teacher');
+                        const cachedCount = parseInt(localStorage.getItem(`msgCount_student_${teacher.id}`) || '0');
+                        const newCount = teacherMessages.length;
+                        
+                        // If this is the currently open conversation, mark as read
+                        if (teacher.id === selectedTeacherId) {
+                            markConversationAsRead(teacher.id);
+                        } else {
+                            // For other conversations, update unread count if there are new messages from teacher
+                            if (newCount > cachedCount) {
+                                const newMessages = newCount - cachedCount;
+                                addUnreadMessage(teacher.id);
+                            }
+                        }
+                        
+                        localStorage.setItem(`msgCount_student_${teacher.id}`, newCount);
+                    }
+                } catch (error) {
+                    console.log('Error polling messages');
+                }
+            }
+        }
+        
         setInterval(() => {
             if (selectedTeacherId) {
                 loadMessages();
             }
+            // Always poll to update badges in real-time
+            pollForNewMessages();
         }, 3000);
     </script>
 </body>
