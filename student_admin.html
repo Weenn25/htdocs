@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<title>Students - Admin Panel</title>
+		<link rel="stylesheet" href="css/admin.css" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<div class="app">
+			<aside class="sidebar">
+				<div class="brand">Glorious God's Family<span>Christian School</span></div>
+				<nav>
+					<a href="admin.html">Dashboard</a>
+					<a class="active" href="student_admin.html">Students</a>
+					<a href="teachers.html">Teachers</a>
+					<a href="classes.html">Classes</a>
+					<a href="reports.html">Reports</a>
+					<a href="settings.html">Settings</a>
+				</nav>
+				<div class="sidebar-foot">Logged in as <strong>admin</strong></div>
+			</aside>
+
+			<main class="main">
+				<header class="topbar">
+					<h1>Students</h1>
+					<div class="top-actions">
+						<input id="globalSearch" placeholder="Search students..." />
+						<button id="addStudent">+ Add Student</button>
+					</div>
+				</header>
+
+				<section class="charts">
+					<div class="chart-card">
+						<h3>GPA Distribution</h3>
+						<canvas id="gpaChart"></canvas>
+					</div>
+					<div class="chart-card">
+						<h3>Student Attendance Trend</h3>
+						<canvas id="studentAttendanceChart"></canvas>
+					</div>
+				</section>
+
+				<section class="data-table">
+					<div class="table-actions">
+						<label>Show <select id="pageSize"><option>10</option><option>25</option><option>50</option></select> rows</label>
+					</div>
+					<table id="studentsTable">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Name</th>
+								<th>Class</th>
+								<th>GPA</th>
+								<th>Attendance %</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+				</section>
+
+				<footer class="footer">© <span id="year"></span> Schoolwide Management System</footer>
+			</main>
+		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script src="admin.js" defer></script>
+		<script>
+			// GPA Distribution Chart
+			const gpaCtx = document.getElementById('gpaChart').getContext('2d');
+			new Chart(gpaCtx, {
+				type: 'doughnut',
+				data: {
+					labels: ['A (90-100)', 'B (80-89)', 'C (70-79)', 'D (60-69)', 'F (0-59)'],
+					datasets: [{
+						data: [45, 28, 18, 6, 3],
+						backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#6b7280']
+					}]
+				},
+				options: {
+					responsive: true,
+					plugins: {
+						legend: { position: 'bottom' }
+					}
+				}
+			});
+
+			// Student Attendance Trend
+			const attendanceCtx = document.getElementById('studentAttendanceChart').getContext('2d');
+			new Chart(attendanceCtx, {
+				type: 'line',
+				data: {
+					labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+					datasets: [{
+						label: 'Attendance %',
+						data: [92, 88, 95, 91, 89, 93],
+						borderColor: '#3b82f6',
+						backgroundColor: 'rgba(59, 130, 246, 0.1)',
+						tension: 0.4
+					}]
+				},
+				options: {
+					responsive: true,
+					plugins: {
+						legend: { display: true }
+					},
+					scales: {
+						y: { beginAtZero: true, max: 100 }
+					}
+				}
+			});
+
+			document.getElementById('year').textContent = new Date().getFullYear();
+		</script>
+	</body>
+</html>

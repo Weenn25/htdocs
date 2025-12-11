@@ -1,0 +1,568 @@
+* {
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --linear-grad: linear-gradient(to right, #2864fc, #f920f9);
+            --grad-clr1: #0a25ac;
+            --grad-clr2: #ff00ae;
+        }
+
+        body {
+            height: 100vh;
+            background: #f6f5f7;
+            display: grid;
+            place-content: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            position: relative;
+            width: 850px;
+            height: 600px;
+            background-color: #FFF;
+            box-shadow: 25px 30px 55px rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.06); /* New: subtle border to the sign-in container */
+             /* Important for the sliding effect */
+
+        }
+        .container h1 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .form-container {
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            padding: 0px 40px;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .sign-up-container {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .log-in-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+
+        form {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0px 50px;
+        }
+
+        h1.signin {
+            color: var(--grad-clr2);
+        }
+        
+        h1.login {
+            color: var(--grad-clr1);
+        }
+
+        span {
+            font-size: 12px;
+        }
+
+        .infield {
+            position: relative;
+            margin: 6px 0px;
+            width: 100%;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #f3f3f3;
+            border: none;
+            outline: none;
+        }
+
+        label {
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            transform: translate(-50%);
+            width: 0%;
+            height: 2px;
+            background: var(--linear-grad);
+            transition: 0.3s;
+        }
+
+        input:focus ~ label {
+            width: 100%;
+        }
+
+        a {
+            color: #bcbaba;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 15px 0px;
+        }
+
+        a.forgot {
+            padding-bottom: 3px;
+            border-bottom: 2px solid #2730af62;
+        }
+
+        button {
+            border-radius: 20px;
+            border: 1px solid var(--grad-clr1);
+            color: #FFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: var(--linear-grad); /* Added background for form buttons */
+        }
+
+        .form-container button {
+            margin-top: 17px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .form-container button:hover {
+            background: #FFF;
+            color: var(--grad-clr1);
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 9;
+        }
+
+        .overlay {
+            position: relative;
+            background: var(--linear-grad);
+            color: #FFF;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0px 40px;
+            text-align: center;
+            height: 100%;
+            width: 50%;
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-left {
+            transform: translateX(-20%);
+        }
+
+        .overlay-right {
+            right: 0;
+            transform: translateX(0%);
+        }
+
+        .overlay-panel h1 {
+            color: #FFF;
+        }
+
+        p {
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 25px 0px 35px;
+        }
+
+        /* Active State Classes (The magic of the transition) */
+        .right-panel-active .log-in-container {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+
+        .right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        .right-panel-active .overlay-left {
+            transform: translateX(0%);
+        }
+
+        .right-panel-active .overlay-right {
+            transform: translateX(20%);
+        }
+
+        @keyframes show {
+            0%, 50% {
+                opacity: 0;
+                z-index: 1;
+            }
+            50.1%, 100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+          .toggle-switch-wrapper {
+            position: absolute;
+            top: 20px;
+            right: 20px; /* Initial position: Top Right (Log In state) */
+            transform: none;
+            z-index: 1000; 
+            padding: 5px 5px;
+            background: #fff;
+            border-radius: 25px;
+            box-shadow: 3px 4px 10px rgba(8, 8, 8, 0.444);
+            border: 1px solid #393838;
+            /* Added transition for smooth positional change */
+            transition: all 0.6s ease-in-out; 
+        }
+        
+        /* New rule: When the right panel is active (Sign Up state), move the wrapper to the top-left */
+        .right-panel-active .toggle-switch-wrapper {
+            right: auto; /* Deactivate right positioning */
+            left: 20px; /* New position: Top Left (Sign In state) */
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 62px;
+            height: 37px;
+            border-radius: 25px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #4023fe; /* Log In default color (yellow) */
+            transition: .4s;
+            border-radius: 37px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 29px;
+            width: 29px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        /* When checked (Sign Up), change color and slider position */
+        input:checked + .toggle-slider {
+            background-color: #ff25db; /* Sign Up color (green) */
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(25px); 
+        }
+
+        /* Responsive adjustments for mobile view - keep layout & functions unchanged */
+@media (max-width: 1024px) {
+    /* Container scales down with a smaller max-width and auto height */
+    body {
+        height: auto;
+        padding: clamp(8px, 3vw, 20px);
+        display: block;
+        width: 100%;
+        margin: 0;
+    }
+
+    .container {
+        width: 100%;
+        max-width: none;
+        height: auto;
+        min-height: auto;
+        border-radius: 14px;
+        overflow: visible;
+        padding-bottom: clamp(16px, 3vw, 24px);
+    }
+
+    /* Make form containers stack and be relative - no off-screen transforms */
+    .form-container {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: clamp(8px, 2vw, 16px);
+        transition: none; /* keep switching logical but avoid accidental shifting on load */
+    }
+
+    /* Ensure both form panels are visible / stacked on mobile */
+    .sign-up-container,
+    .log-in-container {
+        left: 0;
+        transform: none;
+        opacity: 1;
+        z-index: 2;
+    }
+
+    form {
+        padding: clamp(8px, 2vw, 16px);
+        height: auto;
+    }
+
+    h1.signin, h1.login {
+        font-size: clamp(18px, 5vw, 24px);
+        margin-bottom: clamp(12px, 2vw, 16px);
+    }
+
+    .infield {
+        margin: clamp(6px, 1.5vw, 10px) 0;
+    }
+
+    input {
+        padding: clamp(10px, 2.5vw, 14px) clamp(10px, 2.5vw, 14px);
+        font-size: clamp(12px, 3vw, 16px);
+    }
+
+    label {
+        left: 0;
+        transform: none;
+        width: 100%;
+    }
+
+    /* Overlay adapts to mobile as a vertical block - doesn't hide forms */
+    .overlay-container {
+        position: relative;
+        width: 100%;
+        height: auto;
+        left: 0;
+        top: 0;
+        transform: none !important;
+        z-index: 0; /* overlay behind forms */
+    }
+
+    .overlay {
+        left: 0;
+        width: 100%;
+        height: auto;
+        transform: none !important;
+        display: block;
+        padding: clamp(8px, 2vw, 16px);
+        box-sizing: border-box;
+        z-index: 0;
+        pointer-events: none; /* allow interactions on form elements above */
+    }
+
+    .overlay-panel {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: clamp(10px, 2.5vw, 16px);
+        transform: none !important;
+    }
+
+    .overlay-panel .logo {
+        max-width: 240px;
+        max-height: 240px;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Hide the duplicate top overlay panel and show only the bottom one */
+    .overlay-left {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* Ensure the right panel is visible and centered at the bottom */
+    .overlay-right {
+        display: flex !important;
+        visibility: visible !important;
+        width: 100% !important;
+        height: auto !important;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(10px, 2.5vw, 20px) clamp(10px, 2.5vw, 20px) !important;
+        box-sizing: border-box;
+    }
+
+    /* Make overlay container smaller and keep it behind forms */
+    .overlay {
+        width: 100% !important;
+        left: 0 !important;
+        height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+        pointer-events: none;
+    }
+
+    /* Keep overlay-panel content readable and not duplicated */
+    .overlay-panel h1,
+    .overlay-panel p {
+        color: #fff;
+        text-align: center;
+        padding: clamp(4px, 1.5vw, 12px);
+    }
+
+    /* Keep toggle accessible - position at top but smaller footprint */
+    .toggle-switch-wrapper {
+        position: fixed;
+        top: clamp(8px, 2vw, 14px);
+        right: clamp(8px, 2vw, 14px);
+        left: auto;
+        padding: clamp(3px, 0.8vw, 6px);
+        z-index: 2000;
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+        border: 1px solid #e0e0e0;
+    }
+
+    .toggle-switch {
+        width: clamp(44px, 10vw, 56px);
+        height: clamp(24px, 6vw, 32px);
+    }
+
+    .toggle-slider:before {
+        width: clamp(20px, 4.5vw, 26px);
+        height: clamp(20px, 4.5vw, 26px);
+        left: 2px;
+        bottom: 2px;
+    }
+
+    .toggle-slider {
+        border-radius: 25px;
+    }
+
+    /* Default mobile: show login and hide signup */
+    .log-in-container {
+        display: block;
+        opacity: 1;
+        z-index: 21; /* in front */
+        pointer-events: auto;
+        height: auto;
+    }
+    .sign-up-container {
+        display: none;
+        opacity: 0;
+        z-index: 19;
+        pointer-events: none;
+        height: 0;
+        overflow: hidden;
+        transform: none !important;
+    }
+
+    /* When toggle (container.right-panel-active) is active, show signup and hide login */
+    .container.right-panel-active .sign-up-container,
+    .right-panel-active .sign-up-container {
+        display: block;
+        opacity: 1;
+        z-index: 22; /* above overlay & login */
+        pointer-events: auto;
+        height: auto;
+        overflow: visible;
+        transform: none !important;
+    }
+    .container.right-panel-active .log-in-container,
+    .right-panel-active .log-in-container {
+        display: none;
+        opacity: 0;
+        z-index: 18;
+        pointer-events: none;
+        transform: none !important;
+    }
+
+    /* Ensure overlay stays behind the forms on mobile */
+    .overlay-container {
+        z-index: 0; /* overlay behind forms */
+    }
+
+    .overlay {
+        z-index: 0;
+        pointer-events: none; /* allow interactions on form elements above */
+    }
+
+    /* Bring form containers above overlay and ensure proper stacking */
+    .form-container {
+        z-index: 20; /* forms above overlay */
+        pointer-events: auto;
+        transform: none !important; /* prevent any transform from hiding forms */
+    }
+
+    /* Reset transforms that hide forms on mobile and avoid off-screen translation */
+    .sign-up-container,
+    .log-in-container {
+        transform: none !important;
+    }
+
+    /* Ensure the toggle remains clickable */
+    .toggle-switch-wrapper {
+        z-index: 1003;
+    }
+
+    /* Ensure buttons remain usable & legible on smaller screens */
+    .form-container button {
+        padding: clamp(8px, 2vw, 12px) clamp(18px, 4vw, 40px);
+        font-size: clamp(11px, 2.5vw, 13px);
+        margin-top: clamp(12px, 2vw, 16px);
+    }
+
+    a {
+        font-size: clamp(12px, 2vw, 14px);
+        margin: clamp(10px, 2vw, 14px) 0px;
+    }
+
+    p {
+        font-size: clamp(12px, 2.5vw, 14px);
+        margin: clamp(8px, 1.5vw, 14px) 0 clamp(10px, 2vw, 16px);
+        line-height: 18px;
+    }
+
+    .overlay-panel h1 {
+        font-size: clamp(16px, 4vw, 22px);
+    }
+}

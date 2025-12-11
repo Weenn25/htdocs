@@ -1,0 +1,1116 @@
+:root {
+    --bg: #f6f8fb;
+    --panel: #3d85f8;
+    --green: #7a7f91;
+    --yellow: #d4e589;
+    --muted: #7b8388;
+    --card: #ffffff;
+    --border: #e6e9ef;
+    --love: #62aef9;
+    --grey: #252627;
+    --pink: #fd4ba7;
+
+    --radius: 14px;
+    --shadow-sm: 0 4px 12px rgba(2, 6, 23, 0.04);
+    --shadow-md: 0 10px 30px rgba(11, 17, 24, 0.06);
+    --shadow-lg: 0 20px 50px rgba(2, 6, 23, 0.12);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial;
+    --sidebar-width: 280px;
+    --navbar-height: 64px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: Inter, system-ui, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    background: var(--bg);
+    color: var(--grey);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
+    min-height: 100vh; /* Ensure body takes full height */
+}
+
+/* ===== NAVBAR (TOP BAR) ===== */
+.navbar {
+    background: linear-gradient(180deg, var(--panel) 0%, #fd4ba7 100%);
+    color: #ffffff;
+    padding: 16px 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-lg);
+    border-bottom: 1px solid rgba(176, 176, 142, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    height: var(--navbar-height);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0; /* Prevent the navbar brand from forcing wide layout */
+}
+
+.logo-image {
+    width: 45px;
+    height: 40px;
+}
+
+.navbar-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.navbar-title {
+    font-weight: 700;
+    font-size: 14px;
+    margin: 0;
+}
+
+.navbar-subtitle {
+    font-weight: 400;
+    font-size: 14px;
+    margin: 0;
+    color: #401454;
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-menu span {
+    font-size: 14px;
+}
+
+.user-menu a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.user-menu a svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s;
+}
+
+.user-menu a:hover svg {
+    transform: scale(1.1);
+}
+
+.user-menu img {
+    width: 24px;
+    height: 24px;
+}
+
+/* ===== PAGE WRAPPER & LAYOUT ===== */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    /* Padding top equals navbar height to prevent content from being hidden */
+    padding-top: var(--navbar-height);
+    /* Shift content to the right on desktop */
+    padding-left: var(--sidebar-width);
+    box-sizing: border-box;
+    /* Ensure main content always fits available viewport width,
+       even when the sidebar is transformed offscreen */
+    width: 100%;
+}
+
+/* Prevent images from overflowing on small screens and ensure consistent sizing */
+img, .logo-image, .avatar, .avatar-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.side {
+    width: var(--sidebar-width);
+    background: linear-gradient(180deg, var(--love) 0%, #3d71a4 100%);
+    color: #ffffff;
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: fixed;
+    top: var(--navbar-height);
+    left: 0;
+    height: calc(100vh - var(--navbar-height));
+    z-index: 1000;
+    box-shadow: 2px 0 8px rgba(2, 6, 23, 0.1);
+    border-right: 1px solid rgba(218, 218, 24, 0.1);
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.brand {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--love) 0, var(--yellow) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: black;
+    font-size: 18px;
+    box-shadow: 0 8px 24px rgba(15, 17, 20, 0.2);
+}
+
+.brand-text {
+    flex: 1;
+}
+
+.brand-text .title {
+    font-weight: 700;
+    font-size: 20px;
+    margin: 0;
+}
+
+.brand-text .subtitle {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 2px 0 0;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 28px;
+    margin-bottom: 28px;
+}
+
+.nav a {
+    color: #fff8f8;
+    text-decoration: none;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.nav a:hover {
+    background: linear-gradient(
+        95deg,
+        var(--yellow) 0%,
+        rgba(255, 255, 255, 0.273)
+    );
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+.nav a.active {
+    background: linear-gradient(
+        90deg,
+        var(--yellow) 0%,
+        rgba(255, 255, 255, 0.382) 100%
+    );
+    color: ffffff;
+    font-weight: 600;
+    box-shadow: inset 0 2px 8px rgba(218, 218, 24, 0.1);
+}
+
+.side-foot {
+    padding: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.side-foot strong {
+    color: #ffffff;
+}
+
+/* ===== MAIN CONTENT AREA & CARDS ===== */
+.main {
+    flex-grow: 1;
+    padding: 32px 44px;
+    background: linear-gradient(180deg, var(--bg) 0%, #ffffff 100%);
+    min-height: calc(100vh - var(--navbar-height) - 100px);
+    max-width: 100%;
+    box-sizing: border-box;
+    /* Make main area fluid on mobile and reduce padding to avoid overflow */
+    @media (max-width: 900px) {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+    /* Prevent layout children from forcing body horizontal overflow */
+    min-width: 0;
+}
+
+/* Improve cards grid responsiveness: automatic column fitting */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* responsive columns */
+    gap: 20px;
+    padding-top: 20px;
+    align-items: start;
+}
+
+/* Ensure cards don't overflow their container */
+.card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: visible; /* allow internal scroll where relevant */
+    word-break: break-word;
+}
+
+/* Avoid the .card content forcing horizontal overflow */
+.card .card-value {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+/* Force the main content container not to overflow horizontally even if children set wide min-widths */
+.page-wrapper > main {
+    min-width: 0;
+}
+
+/* Schedule table wrapper ensures horizontal scroll without expanding page width */
+.schedule-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+}
+
+/* Make schedule tables not force a large min-width that expands the page */
+.schedule-table {
+    table-layout: auto;
+    width: 100%;
+    min-width: 0; /* remove rigid min-width to avoid forcing horizontal overflow */
+    max-width: none;
+}
+
+/* Ensure card images scale down nicely on small screens */
+.card img, .card svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Slightly smaller padding for cards on smaller devices */
+@media (max-width: 480px) {
+    .cards { gap: 12px; }
+    .card { padding: 12px; }
+}
+
+.header {
+    color: var(--pink);
+}
+
+/* Make the announcements card span 2 rows and 2 columns */
+.cards .card:nth-child(5) {
+    grid-column: span 2;
+    grid-row: span 2;
+    min-height: 200px;
+}
+
+.card {
+    background: var(--card);
+    padding: 24px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    border: 1px solid var(--border);
+}
+
+.card:hover {
+    box-shadow: translateY(-2px);
+    border-color: var(--pink);
+}
+
+.card-title {
+    color: var(--panel);
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.card-value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background: linear-gradient(180deg, #1a1d20 0%, #121517 100%);
+    color: white;
+    padding: 35px 44px 30px;
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section h3 {
+    color: var(--love);
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.footer-section a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-section a:hover {
+    color: var(--yellow);
+}
+
+.social-links {
+    display: flex;
+    gap: 12px;
+}
+
+.social-links svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+    transition: color 0.2s;
+}
+
+.social-links a:hover svg {
+    color: var(--yellow);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 35px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 13px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.footer-links a {
+    padding: 0 5px;
+}
+
+/* ===== RESPONSIVENESS (MOBILE) ===== */
+@media (max-width: 1200px) {
+    .navbar {
+        padding: 16px 30px;
+    }
+    .main {
+        padding: 32px 30px;
+    }
+    .footer {
+        padding: 40px 30px 30px;
+    }
+}
+
+@media (max-width: 900px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cards .card:nth-child(5) {
+        grid-column: span 2;
+        grid-row: span 1;
+    }
+
+    .main {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+    .navbar {
+        padding: 10px 14px;
+    }
+}
+
+/* Hide hamburger toggle on desktop by default */
+.hamburger {
+    display: none; /* hidden for wide screens */
+}
+
+/* Prevent the navbar brand from forcing wide layout */
+.navbar-brand {
+    min-width: 0;
+}
+.navbar-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 1300px) {
+    /* Mobile Breakpoint Overrides */
+    :root {
+        --sidebar-width: 0px;
+        --navbar-height: 56px;
+    }
+
+    /* Footer content stacks on small screens */
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    /* Sidebar visibility and layout */
+    /* NOTE: Use transform sliding for sidebar on mobile instead of display:none so it can be toggled */
+    .side {
+        position: fixed !important;
+        width: 260px;
+        height: calc(100vh - var(--navbar-height));
+        top: var(--navbar-height);
+        left: 0;
+        transform: translateX(-110%);
+        display: block;
+        padding: 15px;
+        overflow-y: auto;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        z-index: 2200;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* When body has .sidebar-open class slide the sidebar into view */
+    body.sidebar-open .side {
+        transform: translateX(0);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    }
+
+    /* Overlay for closing the sidebar */
+    .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.35);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .2s ease;
+        z-index: 2100;
+        display: none;
+    }
+    .sidebar-overlay.open {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Keep consistent overlay behavior when using body.sidebar-open */
+    body.sidebar-open .sidebar-overlay {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Page wrapper adjusts for hidden sidebar */
+    .page-wrapper {
+        padding-left: 0;
+        padding-top: var(--navbar-height);
+        /* FIX: Removed incorrect margin-left */
+    }
+
+    /* Main content takes full width with smaller padding */
+    .main,
+    .footer {
+        width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .navbar {
+        padding: 10px 20px;
+        height: var(--navbar-height);
+        /* FIX: Removed invalid position: flex and unnecessary z-index/top rules */
+    }
+
+    /* Show hamburger only on narrow/medium screens (<=1300px) */
+    .hamburger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        color: #fff;
+        border-radius: 6px;
+        transition: background 0.12s ease, transform 0.12s ease;
+        margin-right: 8px;
+        z-index: 3000;
+    }
+    .hamburger:hover { background: rgba(255,255,255,0.06); transform: translateY(-1px); }
+    .hamburger .bars { display:block; width:20px; height:2px; background: #fff; position:relative; border-radius:2px; }
+    .hamburger .bars::before, .hamburger .bars::after { content:""; position:absolute; left:0; right:0; height:2px; background:#fff; border-radius:2px; }
+    .hamburger .bars::before { top: -6px; }
+    .hamburger .bars::after { top: 6px; }
+
+    /* When body.sidebar-open is used ensure overlay shows */
+    body.sidebar-open .sidebar-overlay {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Card layout for mobile */
+    .cards {
+        grid-template-columns: 1fr;
+        padding: 10px 0;
+    }
+    .cards .card:nth-child(5) {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+    .navbar-logo {
+        width: 36px;
+        height: 36px;
+    }
+    .day-name {
+        padding: 5px;
+        font-size: 12px;
+    }
+    .calender-header h2 {
+        font-size: 20px;
+    }
+    .nav-button {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    #add-event-form button,
+    #add-event-form input[type="text"],
+    #add-event-form input[type="date"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    #add-event-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/*calendar*/
+
+/* .calendar-container {
+    padding: 20px 0;
+    margin: 0 auto;
+}*/
+/* .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: var(--card);
+    padding: 15px 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+} */
+/* .calendar-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--panel);
+} */
+.nav-button {
+    background-color: #ff65c7;
+    color: #000000;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.1s;
+}
+.nav-button:hover {
+    background-color: #fef35cf2;
+    transform: translateY(-1px);
+}
+/* .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    background-color: var(--card);
+    padding: 15px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+}
+.day-name {
+    text-align: center;
+    font-weight: 600;
+    color: var(--panel);
+
+    font-size: 14px;
+    background-color: transparent !important;
+    background: none !important;
+}
+  /* .calendar-day {
+  aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 8px;
+    font-weight: 400;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: var(--bg);
+    border: 1px solid var(--panel);
+    position: relative;
+    color: var(--panel);
+    padding-block: 0;
+}
+.calendar-day.empty {
+    background-color: transparent;
+    border: none;
+    cursor: default;
+}
+.calendar-day:not(.empty):hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.calendar-day.today {
+    border: 2px solid var(--light-pink);
+    font-weight: 700;
+}
+
+.calendar-day.selected {
+    background-color: var(--yellow);
+    color: var(--panel);
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+    transform: scale(1.02);
+    z-index: 2; /* Bring selected day forward 
+}*/
+
+.calendar-day.has-event {
+    background-color: #bee0ff; /* Light yellow background */
+}
+
+.calendar-day.selected .event-marker {
+    background-color: var(--panel); /* Change marker color on select */
+}
+*/ .event-marker {
+    position: absolute;
+    bottom: 5px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--green);
+    margin-top: 4px;
+}
+.events-list-card {
+    margin-top: 30px;
+    padding: 30px;
+    min-height: 150px;
+}
+.events-list-card .card-title {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: var(--panel);
+    font-weight: 600;
+}
+#events-list {
+    list-style: disc;
+    padding-left: 20px;
+    margin-top: 10px;
+    font-size: 15px;
+    color: #333;
+}
+#events-list li {
+    margin-top: 10px;
+    color: #333;
+    line-height: 1.4;
+}
+.even-management-card {
+    margin-top: 20px;
+    padding: 24px;
+}
+#add-event-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+#add-event-form input[type="text"],
+#add-event-form input[type="date"] {
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    flex-grow: 1;
+    font-size: 14px;
+}
+#add-even-form button {
+    background-color: var(--pink);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+#add-event-form button:hover {
+    background-color: #3747db;
+}
+#message-box {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    display: none;
+}
+.message-success {
+    background-color: #e6ffe6;
+    color: #006600;
+}
+.message-error {
+    background-color: #ffe6e6;
+    color: #cc0000;
+}
+
+/* ===== Settings page styles (merge below main stylesheet) ===== */
+.settings-container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-top: 8px;
+}
+
+.settings-section {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+}
+
+.settings-section h3 {
+    margin: 0 0 12px;
+    color: var(--panel);
+    font-size: 18px;
+    font-weight: 700;
+    display: block;
+}
+
+/* Tabs */
+.settings-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.settings-tab-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all 0.18s ease;
+}
+.settings-tab-btn.active {
+    color: var(--panel);
+    background: linear-gradient(
+        90deg,
+        rgba(61, 133, 248, 0.06),
+        rgba(253, 75, 167, 0.03)
+    );
+    border-color: rgba(61, 133, 248, 0.12);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Form layout and controls */
+.settings-form-group {
+    margin-bottom: 14px;
+}
+.settings-form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: var(--panel);
+}
+.settings-form-group input[type="text"],
+.settings-form-group input[type="email"],
+.settings-form-group input[type="tel"],
+.settings-form-group input[type="password"],
+.settings-form-group select,
+.settings-form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    background: #fff;
+    box-sizing: border-box;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.settings-form-group input:focus,
+.settings-form-group select:focus,
+.settings-form-group textarea:focus {
+    outline: none;
+    border-color: var(--love);
+    box-shadow: 0 6px 18px rgba(61, 133, 248, 0.06);
+}
+.help {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* Inline input + toggle button */
+.input-inline {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.pwd-toggle {
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+/* Password strength bar */
+.pwd-strength {
+    margin-top: 8px;
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+.pwd-strength-bar {
+    height: 100%;
+    width: 0%;
+    background: #ff6b6b;
+    transition: width 0.18s ease, background 0.18s ease;
+}
+
+/* Message box */
+.message-box {
+    display: none;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    position: relative;
+    font-weight: 600;
+}
+.message-box.show {
+    display: block;
+}
+.message-box.success {
+    background: #eaf8ed;
+    color: #0b6a2c;
+    border: 1px solid rgba(57, 181, 74, 0.12);
+}
+.message-box.error {
+    background: #fff1f1;
+    color: #a81b1b;
+    border: 1px solid rgba(255, 102, 102, 0.12);
+}
+.msg-close {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* Buttons (ensure consistent with theme) */
+.settings-btn {
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.settings-btn.primary {
+    background: linear-gradient(90deg, var(--panel), #fd4ba7);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(61, 133, 248, 0.08);
+}
+.settings-btn.primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.settings-btn.secondary {
+    background: var(--card);
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 12px;
+    }
+    .input-inline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .settings-tabs {
+        flex-wrap: wrap;
+    }
+}
+
+/* Prevent the navbar brand from forcing wide layout */
+.navbar-brand {
+    min-width: 0;
+}
+.navbar-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Ensure main content always fits available viewport width,
+   even when the sidebar is transformed offscreen */
+.page-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Make main area fluid on mobile and reduce padding to avoid overflow */
+@media (max-width: 900px) {
+    .main {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+    .navbar {
+        padding: 10px 14px;
+    }
+}
+
+/* Schedule table - remove too-large minimum width so table can scale,
+   keep wrapper scroll enabled for wide tables on small devices */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: auto; /* removed rigid wide min width so it doesn't force overflow */
+    table-layout: auto; /* good defaults; user can scroll horizontally via wrapper */
+}
+.schedule-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* Reduce card paddings on very small screens to avoid horizontal clipping */
+@media (max-width: 480px) {
+    .card {
+        padding: 12px;
+        min-height: auto;
+    }
+    .card .card-value {
+        font-size: 18px;
+    }
+}
+
+/* Make sure the body doesn't overflow horizontally due to any element */
+html, body { overflow-x: hidden; }
+
+/* Disable transform-based scroll locking if the sidebar is off-screen.
+   Keep sidebar transform sliding intact but ensure main isn't clipped */
+@media (max-width: 1300px) {
+    /* ...existing mobile sidebar code stays the same ... */
+}
+
+/* Utility: single-line ellipsis & multi-line clamps */
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Apply safe ellipsis to navbar/section titles and other narrow-line headings */
+.navbar-title,
+.navbar-subtitle,
+.card-title,
+.schedule-peek strong,
+.my-sections .section-link {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Avoid overly long inline content from causing overflow */
+.cards .card-value {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
