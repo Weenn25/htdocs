@@ -288,6 +288,9 @@ $current_page = 'teacher_chat.php';
             </div>
         </div>
         <div class="navbar-actions">
+            <button id="sidebarToggle" class="hamburger" aria-controls="mainSidebar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="bars" aria-hidden="true"></span>
+            </button>
             <div class="user-menu">
                 <span><?php echo $teacher_name; ?></span>
                 <a href="teacher-logout.php">
@@ -300,7 +303,7 @@ $current_page = 'teacher_chat.php';
     </nav>
 
     <div class="page-wrapper">
-        <aside id="mainSidebar" class="side">
+        <aside id="mainSidebar" class="side" aria-hidden="false" role="navigation">
             <nav class="nav">
                 <a href="teacher.php">Dashboard</a>
                 <a href="tprofile.php">Profile</a>
@@ -362,6 +365,60 @@ $current_page = 'teacher_chat.php';
     </div>
 
     <script>
+        // ===== SIDEBAR TOGGLE LOGIC (matching teacher.php) =====
+        (function () {
+            const toggleBtn = document.getElementById('sidebarToggle');
+            const side = document.getElementById('mainSidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const navLinks = document.querySelectorAll('.side .nav a');
+
+            if (!toggleBtn || !side || !overlay) return;
+
+            function openSidebar() {
+                document.body.classList.add('sidebar-open');
+                overlay.classList.add('open');
+                overlay.setAttribute('aria-hidden', 'false');
+                side.setAttribute('aria-hidden', 'false');
+                toggleBtn.setAttribute('aria-expanded', 'true');
+                const firstLink = side.querySelector('.nav a');
+                if (firstLink) firstLink.focus();
+            }
+
+            function closeSidebar() {
+                document.body.classList.remove('sidebar-open');
+                overlay.classList.remove('open');
+                overlay.setAttribute('aria-hidden', 'true');
+                side.setAttribute('aria-hidden', 'true');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+                toggleBtn.focus();
+            }
+
+            toggleBtn.addEventListener('click', function() {
+                const isOpen = side.getAttribute('aria-hidden') === 'false';
+                if (isOpen) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+
+            overlay.addEventListener('click', function (e) {
+                e.preventDefault();
+                closeSidebar();
+            });
+
+            navLinks.forEach(a => a.addEventListener('click', function () {
+                if (window.innerWidth <= 900) closeSidebar();
+            }));
+
+            // Close on ESC
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && document.body.classList.contains('sidebar-open')) {
+                    closeSidebar();
+                }
+            });
+        })();
+
         let students = [];
         let selectedStudentId = null;
         let messages = {};
