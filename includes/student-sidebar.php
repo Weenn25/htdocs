@@ -62,6 +62,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
           <a href="student_chat.php" class="nav-link">
             <span class="nav-icon">💬</span>
             <span class="nav-label">Chat with Teachers</span>
+            <span class="chat-unread-badge hidden" id="sidebarChatBadge">0</span>
           </a>
         </li>
       </ul>
@@ -173,6 +174,33 @@ $current_page = basename($_SERVER['PHP_SELF']);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  /* Chat unread badge in sidebar */
+  .chat-unread-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ef4444;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-weight: 700;
+    font-size: 11px;
+    margin-left: auto;
+    animation: badge-pop 0.3s ease-out;
+    flex-shrink: 0;
+  }
+
+  .chat-unread-badge.hidden {
+    display: none;
+  }
+
+  @keyframes badge-pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
   }
 
   /* ===== PAGE WRAPPER FIX ===== */
@@ -392,4 +420,100 @@ $current_page = basename($_SERVER['PHP_SELF']);
       }
     });
   });
+
+  // Update chat notification badge in sidebar
+  function updateSidebarChatBadge() {
+    const badge = document.getElementById('sidebarChatBadge');
+    if (!badge) return;
+    
+    const unread = JSON.parse(localStorage.getItem('unreadConversations_student') || '{}');
+    const totalUnread = Object.values(unread).reduce((sum, count) => sum + count, 0);
+    
+    if (totalUnread > 0) {
+      badge.textContent = totalUnread;
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  }
+
+  // Play notification sound
+  function playNotificationSound() {
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = 800;
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+    } catch (error) {
+      console.log('Could not play notification sound:', error);
+    }
+  }
+
+  // Poll for new messages on other pages
+  async function pollForMessagesInBackground() {
+    try {
+      // Fetch the list of teachers first
+      const teachersResponse = await fetch('../api/get_chat_teachers.php');
+      if (!teachersResponse.ok) return;
+      
+      const teachersData = await teachersResponse.json();
+      const teachers = teachersData.teachers || [];
+      
+      // Check messages for each teacher
+      for (let teacher of teachers) {
+        try {
+          const response = await fetch(`../api/get_chat_messages.php?user_type=student&teacher_id=${teacher.id}`);
+          const data = await response.json();
+          
+          if (!data.error && data.messages) {
+            // Only count messages from teacher (not from student)
+            const teacherMessages = data.messages.filter(msg => msg.sender_type === 'teacher');
+            const cachedCount = parseInt(localStorage.getItem(`msgCount_student_${teacher.id}`) || '0');
+            const newCount = teacherMessages.length;
+            
+            // If there are new messages, update and play sound
+            if (newCount > cachedCount) {
+              const newMessages = newCount - cachedCount;
+              
+              // Update unread count
+              const unread = JSON.parse(localStorage.getItem('unreadConversations_student') || '{}');
+              unread[teacher.id] = (unread[teacher.id] || 0) + newMessages;
+              localStorage.setItem('unreadConversations_student', JSON.stringify(unread));
+              
+              // Play notification sound
+              playNotificationSound();
+            }
+            
+            // Update cache
+            localStorage.setItem(`msgCount_student_${teacher.id}`, newCount);
+          }
+        } catch (error) {
+          console.log('Error polling messages for teacher:', teacher.id);
+        }
+      }
+    } catch (error) {
+      console.log('Error in background polling:', error);
+    }
+  }
+
+  // Check sidebar badge every 1 second to stay in sync
+  setInterval(updateSidebarChatBadge, 1000);
+  
+  // Poll for new messages every 3 seconds on other pages
+  setInterval(pollForMessagesInBackground, 3000);
+  
+  // Initial update when page loads
+  updateSidebarChatBadge();
+
 </script>

@@ -419,6 +419,8 @@ $current_page = 'student_chat.php';
                 const data = await response.json();
                 teachers = data.teachers || [];
                 renderTeachersList();
+                // Update badges immediately after rendering
+                updateNotificationBadge();
             } catch (error) {
                 console.error('Error loading teachers:', error);
             }

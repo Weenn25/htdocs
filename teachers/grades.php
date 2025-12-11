@@ -623,7 +623,7 @@ $nextUrl = $_SERVER['PHP_SELF'] . '?' . http_build_query($baseQsNext);
         <a href="school_calendar.php">School Calendar</a>
         <a href="teacher-announcements.php">Announcements</a>
         <a href="teacherslist.php">Teachers</a>
-        <a href="teacher_chat.php">Chat</a>
+        <a href="teacher_chat.php" style="display: flex; align-items: center; justify-content: space-between;">Chat<span class="teacher-chat-badge hidden">0</span></a>
         <a href="teacher-settings.php">Settings</a>
       </nav>
       <div class="side-foot">Logged in as <strong>Teacher</strong></div>
@@ -1370,5 +1370,6 @@ $nextUrl = $_SERVER['PHP_SELF'] . '?' . http_build_query($baseQsNext);
       });
     }
   </script>
+  <?php require_once __DIR__ . '/../includes/teacher-chat-notifications.php'; ?>
 </body>
 </html>

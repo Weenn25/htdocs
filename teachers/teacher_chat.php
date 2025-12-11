@@ -276,6 +276,7 @@ $current_page = 'teacher_chat.php';
             }
         }
     </style>
+    <?php require_once __DIR__ . '/../includes/teacher-chat-notifications.php'; ?>
 </head>
 <body>
     <nav class="navbar">
@@ -309,7 +310,10 @@ $current_page = 'teacher_chat.php';
                 <a href="school_calendar.php">School Calendar</a>
                 <a href="teacher-announcements.php">Announcements</a>
                 <a href="teacherslist.php">Teachers</a>
-                <a href="teacher_chat.php" class="active">Chat</a>
+                <a href="teacher_chat.php" class="active" style="display: flex; align-items: center; justify-content: space-between;">
+                  <span>Chat</span>
+                  <span class="teacher-chat-badge hidden">0</span>
+                </a>
                 <a href="teacher-settings.php">Settings</a>
             </nav>
             <div class="side-foot">Logged in as <strong>Teacher</strong></div>
@@ -439,6 +443,8 @@ $current_page = 'teacher_chat.php';
                 const data = await response.json();
                 students = data.students || [];
                 renderStudentsList();
+                // Update badges immediately after rendering
+                updateNotificationBadge();
             } catch (error) {
                 console.error('Error loading students:', error);
             }
