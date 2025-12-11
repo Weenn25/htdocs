@@ -1015,6 +1015,7 @@ $allSchedulesJson = json_encode($allSchedules, JSON_HEX_TAG|JSON_HEX_APOS|JSON_H
             <a href="school_calendar.php">School Calendar</a>
             <a href="teacher-announcements.php">Announcements</a>
             <a href="teacherslist.php">Teachers</a>
+            <a href="teacher_chat.php">Chat</a>
             <a href="teacher-settings.php">Settings</a>
         </nav>
         <div class="side-foot">Logged in as <strong>Teacher</strong></div>

@@ -145,7 +145,7 @@ $current_page = 'teacher_chat.php';
         }
         
         .message-bubble {
-            max-width: 70%;
+            max-width: 35%;
             min-width: fit-content;
             padding: 12px 16px;
             border-radius: 12px;
