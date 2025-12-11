@@ -5,7 +5,7 @@
 $host = 'localhost';
 $db_user = 'root';
 $db_pass = '';
-$db_name = 'capstone_db';
+$db_name = 'capstone_db1';
 
 // Create connection to MySQL server (without database first)
 $conn = new mysqli($host, $db_user, $db_pass);
@@ -220,6 +220,17 @@ CREATE TABLE IF NOT EXISTS school_events (
     UNIQUE KEY unique_event (event_date, title)
 );
 
+CREATE TABLE IF NOT EXISTS `messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `student_id` int(11) NOT NULL,
+  `teacher_id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `sender_type` enum('student','teacher') NOT NULL,
+  `created_at` timestamp DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `student_id` (`student_id`),
+  KEY `teacher_id` (`teacher_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ";
 
 // Execute each table creation statement

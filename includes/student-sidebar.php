@@ -58,6 +58,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <span class="nav-label">School Calendar</span>
           </a>
         </li>
+        <li class="nav-item <?php echo ($current_page === 'student_chat.php') ? 'active' : ''; ?>">
+          <a href="student_chat.php" class="nav-link">
+            <span class="nav-icon">💬</span>
+            <span class="nav-label">Chat with Teachers</span>
+          </a>
+        </li>
       </ul>
     </div>
 

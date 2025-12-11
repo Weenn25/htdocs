@@ -113,7 +113,7 @@ function sendPasswordResetEmail($recipientEmail, $resetToken) {
         $mail->isHTML(true);
         $mail->Subject = 'Password Reset Request';
         
-        $resetLink = 'http://g2fchristianschool.ct.ws/reset_password.php?token=' . $resetToken . '&email=' . urlencode($recipientEmail);
+        $resetLink = 'http://localhost/reset_password.php?token=' . $resetToken . '&email=' . urlencode($recipientEmail);
         
         $mail->Body = "
             <h2>Password Reset Request</h2>
